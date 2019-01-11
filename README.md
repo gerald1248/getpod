@@ -1,7 +1,7 @@
 getpod
 ======
 
-Address pods quickly without using the clipboard or listing all pods first. Here's a typical use case:
+Access pods quickly without using the clipboard or listing all pods first. Here's a typical use case:
 
 ```
 $ kubectl logs `getpod kube-proxy` -f
@@ -27,10 +27,20 @@ Why not just a shell script? Because it may not work on Windows. It is hard to o
 
 ## Usage
 ```
-getpod [-kubeconfig PATH] POD
+$ getpod -h
+Usage: getpod [-kubeconfig=PATH] [-a] [-n NAMESPACE] REGEX
+  -a	return all matching pods
+  -kubeconfig string
+    	(optional) absolute path to the kubeconfig file (default "/Users/gerald/.kube/config")
+  -n string
+    	namespace
 ```
+
+The search expression is interpreted in line with the Golang `regexp` package (sadly not PCRE).
 
 ## Build
 ```
-make
+$ make
+$ sudo make install
 ```
+

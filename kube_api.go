@@ -8,8 +8,8 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
-func getPods(kubeconfig *string) []string {
-	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
+func getPods(kubeconfig string, namespace string) []string {
+	config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -21,12 +21,14 @@ func getPods(kubeconfig *string) []string {
 	}
 
 	// fetch current namespace
-	currentNamespace, err := extractCurrentNamespaceFromFile(*kubeconfig)
-	if err != nil {
-		panic(err.Error())
+	if len(namespace) == 0 {
+		namespace, err = extractCurrentNamespaceFromFile(kubeconfig)
+		if err != nil {
+			panic(err.Error())
+		}
 	}
 
-	pods, err := clientset.CoreV1().Pods(currentNamespace).List(metav1.ListOptions{})
+	pods, err := clientset.CoreV1().Pods(namespace).List(metav1.ListOptions{})
 	if err != nil {
 		panic(err.Error())
 	}
