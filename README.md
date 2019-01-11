@@ -38,6 +38,9 @@ Usage: getpod [-kubeconfig=PATH] [-a] [-n NAMESPACE] REGEX
 
 The search expression is interpreted in line with the Golang `regexp` package (sadly not PCRE).
 
+## Run
+To try `gopod` on your computer, download one of the release binaries above (Linux, Mac, Windows).
+
 ## Build
 ```
 $ make
