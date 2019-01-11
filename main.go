@@ -18,15 +18,23 @@ func main() {
 		os.Exit(0)
 	}
 
-	// flags
+	// determine config path first
 	var kubeconfig *string
-	if home := homeDir(); home != "" {
-		kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "absolute path to the kubeconfig file")
-	} else {
-		kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
+	// if presented as flag, use that
+	kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
+	// failing that, use ${KUBECONFIG}
+	if len(*kubeconfig) == 0 {
+		*kubeconfig = os.Getenv("KUBECONFIG")
 	}
+	// as a last resort, use standard location
+	if len(*kubeconfig) == 0 {
+		*kubeconfig = filepath.Join(homeDir(), ".kube", "config")
+	}
+
+	// other flags
 	all := flag.Bool("a", false, "return all matching pods")
 	namespace := flag.String("n", "", "namespace")
+
 	flag.Parse()
 
 	// params
